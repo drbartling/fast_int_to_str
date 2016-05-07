@@ -5,6 +5,8 @@ Target is small 8-bit micros, like PIC or AVR.  On XC8, it is about 20x faster t
 
 ![Screenshot](http://i.imgur.com/1CwZ9OF.png)
 
+The test was done on a PIC16F1778 running at 32MHz, with each function called 255 times.
+
 Function list:
 
 void FAST_IntToStr(char *str int32_t num);
