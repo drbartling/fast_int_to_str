@@ -321,20 +321,22 @@ void UnityConcludeTest(void)
     if (Unity.CurrentTestIgnored)
     {
         Unity.TestIgnores++;
+        UNITY_PRINT_EOL();
     }
     else if (!Unity.CurrentTestFailed)
     {
-        UnityTestResultsBegin(Unity.TestFile, Unity.CurrentTestLineNumber);
-        UnityPrint(UnityStrPass);
+        /* DRB: I'd preffer passed tests to be silent */
+        /* UnityTestResultsBegin(Unity.TestFile, Unity.CurrentTestLineNumber);
+        UnityPrint(UnityStrPass); */ 
     }
     else
     {
         Unity.TestFailures++;
+        UNITY_PRINT_EOL();
     }
 
     Unity.CurrentTestFailed = 0;
     Unity.CurrentTestIgnored = 0;
-    UNITY_PRINT_EOL();
     UNITY_FLUSH_CALL();
 }
 

@@ -154,7 +154,7 @@ SOFTWARE.
 // Section: Template Module APIs
 //
         
-void FAST_IntToStr(char *str, int32_t num)
+void FAST_IntToStr(char str[], int32_t num)
 {
     if (0 > num)
     {
@@ -165,7 +165,7 @@ void FAST_IntToStr(char *str, int32_t num)
     FAST_UintToStr(str, num);
 }
 
-void FAST_Int8ToStr(char *str, int8_t num)
+void FAST_Int8ToStr(char str[], int8_t num)
 {
     if (0 > num)
     {
@@ -176,7 +176,7 @@ void FAST_Int8ToStr(char *str, int8_t num)
     FAST_Uint8ToStr(str, num);
 }
 
-void FAST_Int16ToStr(char *str, int16_t num)
+void FAST_Int16ToStr(char str[], int16_t num)
 {
     if (0 > num)
     {
@@ -187,7 +187,7 @@ void FAST_Int16ToStr(char *str, int16_t num)
     FAST_Uint16ToStr(str, num);
 }
 
-void FAST_Int32ToStr(char *str, int32_t num)
+void FAST_Int32ToStr(char str[], int32_t num)
 {
     if (0 > num)
     {
@@ -198,7 +198,7 @@ void FAST_Int32ToStr(char *str, int32_t num)
     FAST_Uint32ToStr(str, num);
 }
 
-void FAST_UintToStr(char *str, uint32_t num)
+void FAST_UintToStr(char str[], uint32_t num)
 {
     if(UINT8_MAX >= num) // Check fastest case first
     {
@@ -214,36 +214,36 @@ void FAST_UintToStr(char *str, uint32_t num)
     }
 }
 
-void FAST_Uint8ToStr(char *str, uint8_t num)
+void FAST_Uint8ToStr(char str[], uint8_t num)
 {
     char ch = 0;
     bool leedIn = true;
 
     // hundreds place
-    if (num >= 200)
+    if (num >= 200U)
     {
         ch = 2;
-        num -= 200;
+        num -= 200U;
     }
-    else if (num >= 100)
+    else if (num >= 100U)
     {
         ch = 1;
-        num -= 100;
+        num -= 100U;
     }
     ConditionalMoveCharToStr(ch, str, leedIn);
 
     // tens place
-    DigitGet(num, ch, 10);
+    DigitGet(num, ch, 10U);
     ConditionalMoveCharToStr(ch, str, leedIn);
 
     // ones place
-    DigitGet(num, ch, 1)
+    DigitGet(num, ch, 1U)
     MoveCharToStr(ch, str);
 
     *str = 0;
 }
 
-void FAST_Uint16ToStr(char *str, uint16_t num)
+void FAST_Uint16ToStr(char str[], uint16_t num)
 {
     char ch = 0;
     bool leedIn = true;
@@ -267,74 +267,74 @@ void FAST_Uint16ToStr(char *str, uint16_t num)
     ConditionalMoveCharToStr(ch, str, leedIn);
 
     // thousands place
-    DigitGet(num, ch, 1000);
+    DigitGet(num, ch, 1000U);
     ConditionalMoveCharToStr(ch, str, leedIn);
 
     // hundreds place
-    DigitGet(num, ch, 100);
+    DigitGet(num, ch, 100U);
     ConditionalMoveCharToStr(ch, str, leedIn);
 
     // tens place
-    DigitGet(num, ch, 10);
+    DigitGet(num, ch, 10U);
     ConditionalMoveCharToStr(ch, str, leedIn);
 
     // ones place
-    DigitGet(num, ch, 1)
+    DigitGet(num, ch, 1U)
     MoveCharToStr(ch, str);
 
     *str = 0;
 }
 
-void FAST_Uint32ToStr(char *str, uint32_t num)
+void FAST_Uint32ToStr(char str[], uint32_t num)
 {
     char ch = 0;
     bool leedIn = true;
 
-    if (num >= 4000000000L)
+    if (num >= 4000000000UL)
     {
-        num -= 4000000000L;
+        num -= 4000000000UL;
         ch = 4;
     }
     else
     {
-        if (num >= 2000000000L)
+        if (num >= 2000000000UL)
         {
-            num -= 2000000000L;
+            num -= 2000000000UL;
             ch = 2;
         }
-        if (num >= 1000000000L)
+        if (num >= 1000000000UL)
         {
-            num -= 1000000000L;
+            num -= 1000000000UL;
             ch |= 1;
         }
     }
     ConditionalMoveCharToStr(ch, str, leedIn);
 
-    DigitGet(num, ch, 100000000L);
+    DigitGet(num, ch, 100000000UL);
     ConditionalMoveCharToStr(ch, str, leedIn);
 
-    DigitGet(num, ch, 10000000L);
+    DigitGet(num, ch, 10000000UL);
     ConditionalMoveCharToStr(ch, str, leedIn);
 
-    DigitGet(num, ch, 1000000L);
+    DigitGet(num, ch, 1000000UL);
     ConditionalMoveCharToStr(ch, str, leedIn);
 
-    DigitGet(num, ch, 100000L);
+    DigitGet(num, ch, 100000UL);
     ConditionalMoveCharToStr(ch, str, leedIn);
 
-    DigitGet(num, ch, 10000L);
+    DigitGet(num, ch, 10000UL);
     ConditionalMoveCharToStr(ch, str, leedIn);
 
-    DigitGet(num, ch, 1000L);
+    DigitGet(num, ch, 1000UL);
     ConditionalMoveCharToStr(ch, str, leedIn);
 
-    DigitGet(num, ch, 100L);
+    DigitGet(num, ch, 100UL);
     ConditionalMoveCharToStr(ch, str, leedIn);
 
-    DigitGet(num, ch, 10L);
+    DigitGet(num, ch, 10UL);
     ConditionalMoveCharToStr(ch, str, leedIn);
 
-    DigitGet(num, ch, 1L);
+    DigitGet(num, ch, 1UL);
     MoveCharToStr(ch, str);
 
     *str = 0;

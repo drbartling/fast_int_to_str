@@ -89,14 +89,14 @@ SOFTWARE.
  *  None
  *  
  */
-void FAST_IntToStr(char *str, int32_t num);
-void FAST_Int8ToStr(char *str, int8_t num);
-void FAST_Int16ToStr(char *str, int16_t num);
-void FAST_Int32ToStr(char *str, int32_t num);
-void FAST_UintToStr(char *str, uint32_t num);
-void FAST_Uint8ToStr(char *str, uint8_t num);
-void FAST_Uint16ToStr(char *str, uint16_t num);
-void FAST_Uint32ToStr(char *str, uint32_t num);
+void FAST_IntToStr(char str[], int32_t num);
+void FAST_Int8ToStr(char str[], int8_t num);
+void FAST_Int16ToStr(char str[], int16_t num);
+void FAST_Int32ToStr(char str[], int32_t num);
+void FAST_UintToStr(char str[], uint32_t num);
+void FAST_Uint8ToStr(char str[], uint8_t num);
+void FAST_Uint16ToStr(char str[], uint16_t num);
+void FAST_Uint32ToStr(char str[], uint32_t num);
 
 #endif // FAST_INT_TO_STR_H
 
