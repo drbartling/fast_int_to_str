@@ -47,6 +47,7 @@
 #include <string.h>
 #include <assert.h>
 #include "fast_int_to_str.h"
+#include <stdio.h>
 
 #define TEST_ASSERT_EQUAL_STRING(a,b) TEST_AssertEqualString(a, b, __LINE__)
 #define TEST_RUN(a) TEST_SetUp(); a(); TEST_TearDown()
