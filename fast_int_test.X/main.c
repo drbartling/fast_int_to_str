@@ -48,12 +48,14 @@
 #include <assert.h>
 #include "fast_int_to_str.h"
 
+#define TEST_ASSERT_EQUAL_STRING(a,b) TEST_AssertEqualString(a, b, __LINE__)
 #define TEST_RUN(a) TEST_SetUp(); a(); TEST_TearDown()
 #define STRING_LENGTH (30)
 
-uint16_t testLength[30] = {0};
-uint8_t testCount = 0;
-char str[STRING_LENGTH] = {0};
+static uint16_t testLength[30] = {0};
+static uint8_t testCount = 0;
+static char str[STRING_LENGTH] = {0};
+static volatile int line;
 
 void TEST_SetUp(void) {
     TMR1_StopTimer();
@@ -68,8 +70,12 @@ void TEST_TearDown(void) {
     testCount++;
 }
 
-void TEST_ASSERT_EQUAL_STRING(const char a[], const char b[]) {
+void TEST_AssertEqualString(const char a[], const char b[], int _line) {
+    // If break point gets triggered, look at line or _line to get the line
+    // number that failed.
+    line = _line;
     __conditional_software_breakpoint(0 == strcmp(a, b));
+    NOP();
 }
 
 void test_IntToStr(void) {

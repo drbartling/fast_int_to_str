@@ -1,40 +1,21 @@
 
-#ifdef __XC
-#include <xc.h>
-#define _HOSTED
-
-void putch(char c)
-{
-
-}
-
-#else
-uint8_t LATA;
-#endif
-
 #include "unity.h"
 #include "fast_int_to_str.h"
 
 #define STR_SIZE (30)
 static char str[STR_SIZE] = {0};
 
-void setUp(void)
-{
+void setUp(void) {
     int i;
-    for (i = 0; i < STR_SIZE; i++)
-    {
+    for (i = 0; i < STR_SIZE; i++) {
         str[i] = 0;
     }
-    LATA = 1;
 }
 
-void tearDown(void)
-{
-    LATA = 0;
+void tearDown(void) {
 }
 
-void test_IntToStr(void)
-{
+void test_IntToStr(void) {
     // Test 0
     FAST_IntToStr(str, 0);
     TEST_ASSERT_EQUAL_STRING("0", str);
@@ -54,8 +35,7 @@ void test_IntToStr(void)
     TEST_ASSERT_EQUAL_STRING("1203769780", str);
 }
 
-void test_UintToStr(void)
-{
+void test_UintToStr(void) {
     FAST_UintToStr(str, 0);
     TEST_ASSERT_EQUAL_STRING("0", str);
 
@@ -72,16 +52,9 @@ void test_UintToStr(void)
     TEST_ASSERT_EQUAL_STRING("2207051211", str);
 }
 
-int main(void)
-{
+int main(void) {
     UNITY_BEGIN();
     RUN_TEST(test_IntToStr);
-    RUN_TEST(test_Int8ToStr);
-    RUN_TEST(test_Int16ToStr);
-    RUN_TEST(test_Int32ToStr);
     RUN_TEST(test_UintToStr);
-    RUN_TEST(test_Uint8ToStr);
-    RUN_TEST(test_Uint16ToStr);
-    RUN_TEST(test_Uint32ToStr);
     return UNITY_END();
 }

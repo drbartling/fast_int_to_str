@@ -63,8 +63,8 @@ void TMR1_Initialize(void)
 {
     //Set the Timer to the options selected in the GUI
 
-    //T1CKPS 1:8; nT1SYNC synchronize; TMR1CS FOSC/4; TMR1ON enabled; 
-    T1CON = 0x30;
+    //T1CKPS 1:1; nT1SYNC synchronize; TMR1CS FOSC/4; TMR1ON enabled; 
+    T1CON = 0x00;
 
     //T1GSS T1G; TMR1GE disabled; T1GTM disabled; T1GPOL low; T1GGO_nDONE done; T1GSPM disabled; 
     T1GCON = 0x00;
