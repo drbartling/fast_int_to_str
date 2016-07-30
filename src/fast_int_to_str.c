@@ -34,7 +34,7 @@ AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
 LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
-*******************************************************************************/
+ *******************************************************************************/
 
 //
 // Section: Included Files
@@ -42,6 +42,12 @@ SOFTWARE.
 
 #include "fast_int_to_str.h"
 #include <stdbool.h>
+
+typedef union {
+    uint32_t u32;
+    uint16_t u16;
+    uint8_t u8;
+} fast_int_t;
 
 //
 // Section: Macros
@@ -68,13 +74,13 @@ SOFTWARE.
  *
  * @Returns
  *  str, and l are potentially modified by this macro
- *  
+ *
  */
-#define ConditionalMoveCharToStr(c, str, l) \
-        if (c || !l) \
+#define ConditionalMoveCharToStr(digit, str, leadIn) \
+        if (digit || !leadIn) \
         { \
-            MoveCharToStr(c, str); \
-            l = false; \
+            MoveCharToStr(digit, str); \
+            leadIn = false; \
         }
 
 /**
@@ -95,10 +101,10 @@ SOFTWARE.
  *
  * @Returns
  *  str, modified by this macro
- *  
+ *
  */
-#define MoveCharToStr(c, str) \
-        *str = c + '0'; \
+#define MoveCharToStr(digit, str) \
+        *str = digit + '0'; \
         str++
 
 /**
@@ -107,7 +113,7 @@ SOFTWARE.
  *  Gets the leading digit of an integer
  *
  * @Description
- *  Takes a number n, and gets the digit specified by p (place). 
+ *  Takes a number n, and gets the digit specified by p (place).
  *
  * @Preconditions
  *  n must be less than 10 x p
@@ -121,43 +127,41 @@ SOFTWARE.
  *  n - n gets reduced by c * p
  *  c - the digit at place p
  *  p is not modified
- *  
- *  
+ *
+ *
  */
-#define DigitGet(n, c, p) \
-        c = 0; \
-        if (n >= 8*p) \
+#define DigitGet(numberToConvert, digit, orderOfMagnitude) \
+        digit = 0; \
+        if (numberToConvert >= 8*orderOfMagnitude) \
         { \
-            n -= 8*p; \
-            c = (char) 8; \
+            numberToConvert -= 8*orderOfMagnitude; \
+            digit = (char) 8; \
         } \
         else \
         { \
-            if (n >= 4*p) \
+            if (numberToConvert >= 4*orderOfMagnitude) \
             { \
-                n -= 4*p; \
-                c = (char) 4; \
+                numberToConvert -= 4*orderOfMagnitude; \
+                digit = (char) 4; \
             } \
-            if (n >= 2*p) \
+            if (numberToConvert >= 2*orderOfMagnitude) \
             { \
-                n -= 2*p; \
-                c |= (char) 2; \
+                numberToConvert -= 2*orderOfMagnitude; \
+                digit |= (char) 2; \
             } \
         } \
-        if (n >= 1*p) \
+        if (numberToConvert >= 1*orderOfMagnitude) \
         { \
-            n -= 1*p; \
-            c |= (char) 1; \
+            numberToConvert -= 1*orderOfMagnitude; \
+            digit |= (char) 1; \
         }
-        
+
 //
 // Section: Template Module APIs
 //
-        
-void FAST_IntToStr(char str[], int32_t num)
-{
-    if (0 > num)
-    {
+
+void FAST_IntToStr(char str[], int32_t num) {
+    if (0 > num) {
         *str = '-';
         str++;
         num = -num;
@@ -165,178 +169,65 @@ void FAST_IntToStr(char str[], int32_t num)
     FAST_UintToStr(str, num);
 }
 
-void FAST_Int8ToStr(char str[], int8_t num)
-{
-    if (0 > num)
-    {
-        *str = '-';
-        str++;
-        num = -num;
-    }
-    FAST_Uint8ToStr(str, num);
-}
-
-void FAST_Int16ToStr(char str[], int16_t num)
-{
-    if (0 > num)
-    {
-        *str = '-';
-        str++;
-        num = -num;
-    }
-    FAST_Uint16ToStr(str, num);
-}
-
-void FAST_Int32ToStr(char str[], int32_t num)
-{
-    if (0 > num)
-    {
-        *str = '-';
-        str++;
-        num = -num;
-    }
-    FAST_Uint32ToStr(str, num);
-}
-
-void FAST_UintToStr(char str[], uint32_t num)
-{
-    if(UINT8_MAX >= num) // Check fastest case first
-    {
-        FAST_Uint8ToStr(str, num);
-    }
-    else if(UINT16_MAX >= num)
-    {
-        FAST_Uint16ToStr(str, num);
-    }
-    else
-    {
-        FAST_Uint32ToStr(str, num);
-    }
-}
-
-void FAST_Uint8ToStr(char str[], uint8_t num)
-{
+void FAST_UintToStr(char str[], uint32_t num) {
+    fast_int_t fNum;
+    fNum.u32 = num;
     char ch = 0;
     bool leedIn = true;
 
-    // hundreds place
-    if (num >= 200U)
+    if (UINT8_MAX >= num) // Check fastest case first
     {
-        ch = 2;
-        num -= 200U;
+        goto U8;
+    } else if (UINT16_MAX >= num) {
+        goto U16;
+    } else {
+        goto U32;
     }
-    else if (num >= 100U)
-    {
-        ch = 1;
-        num -= 100U;
-    }
-    ConditionalMoveCharToStr(ch, str, leedIn);
 
-    // tens place
-    DigitGet(num, ch, 10U);
-    ConditionalMoveCharToStr(ch, str, leedIn);
-
-    // ones place
-    DigitGet(num, ch, 1U)
-    MoveCharToStr(ch, str);
-
-    *str = 0;
-}
-
-void FAST_Uint16ToStr(char str[], uint16_t num)
-{
-    char ch = 0;
-    bool leedIn = true;
-
-    // ten-thousands
-    if (num >= 40000U)
-    {
-        num -= 40000U;
+U32:
+    if (fNum.u32 >= 4000000000UL) {
+        fNum.u32 -= 4000000000UL;
         ch = 4;
-    }
-    if (num >= 20000U)
-    {
-        num -= 20000U;
-        ch |= 2;
-    }
-    if (num >= 10000U)
-    {
-        num -= 10000U;
-        ch |= 1;
-    }
-    ConditionalMoveCharToStr(ch, str, leedIn);
-
-    // thousands place
-    DigitGet(num, ch, 1000U);
-    ConditionalMoveCharToStr(ch, str, leedIn);
-
-    // hundreds place
-    DigitGet(num, ch, 100U);
-    ConditionalMoveCharToStr(ch, str, leedIn);
-
-    // tens place
-    DigitGet(num, ch, 10U);
-    ConditionalMoveCharToStr(ch, str, leedIn);
-
-    // ones place
-    DigitGet(num, ch, 1U)
-    MoveCharToStr(ch, str);
-
-    *str = 0;
-}
-
-void FAST_Uint32ToStr(char str[], uint32_t num)
-{
-    char ch = 0;
-    bool leedIn = true;
-
-    if (num >= 4000000000UL)
-    {
-        num -= 4000000000UL;
-        ch = 4;
-    }
-    else
-    {
-        if (num >= 2000000000UL)
-        {
-            num -= 2000000000UL;
+    } else {
+        if (fNum.u32 >= 2000000000UL) {
+            fNum.u32 -= 2000000000UL;
             ch = 2;
         }
-        if (num >= 1000000000UL)
-        {
-            num -= 1000000000UL;
+        if (fNum.u32 >= 1000000000UL) {
+            fNum.u32 -= 1000000000UL;
             ch |= 1;
         }
     }
     ConditionalMoveCharToStr(ch, str, leedIn);
 
-    DigitGet(num, ch, 100000000UL);
+    DigitGet(fNum.u32, ch, 100000000UL);
     ConditionalMoveCharToStr(ch, str, leedIn);
 
-    DigitGet(num, ch, 10000000UL);
+    DigitGet(fNum.u32, ch, 10000000UL);
     ConditionalMoveCharToStr(ch, str, leedIn);
 
-    DigitGet(num, ch, 1000000UL);
+    DigitGet(fNum.u32, ch, 1000000UL);
     ConditionalMoveCharToStr(ch, str, leedIn);
 
-    DigitGet(num, ch, 100000UL);
+    DigitGet(fNum.u32, ch, 100000UL);
     ConditionalMoveCharToStr(ch, str, leedIn);
 
-    DigitGet(num, ch, 10000UL);
+U16:
+    DigitGet(fNum.u32, ch, 10000UL);
     ConditionalMoveCharToStr(ch, str, leedIn);
 
-    DigitGet(num, ch, 1000UL);
+    DigitGet(fNum.u16, ch, 1000UL);
     ConditionalMoveCharToStr(ch, str, leedIn);
 
-    DigitGet(num, ch, 100UL);
+    DigitGet(fNum.u16, ch, 100UL);
     ConditionalMoveCharToStr(ch, str, leedIn);
 
-    DigitGet(num, ch, 10UL);
+U8:
+    DigitGet(fNum.u16, ch, 10UL);
     ConditionalMoveCharToStr(ch, str, leedIn);
 
-    DigitGet(num, ch, 1UL);
+    DigitGet(fNum.u8, ch, 1UL);
     MoveCharToStr(ch, str);
 
     *str = 0;
 }
-

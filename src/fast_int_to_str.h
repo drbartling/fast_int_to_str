@@ -34,7 +34,7 @@ AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
 LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
-*******************************************************************************/
+ *******************************************************************************/
 
 #ifndef FAST_INT_TO_STR_H    // Guards against multiple inclusion
 #define FAST_INT_TO_STR_H
@@ -87,20 +87,14 @@ SOFTWARE.
  *
  * @See Also
  *  None
- *  
+ *
  */
 void FAST_IntToStr(char str[], int32_t num);
-void FAST_Int8ToStr(char str[], int8_t num);
-void FAST_Int16ToStr(char str[], int16_t num);
-void FAST_Int32ToStr(char str[], int32_t num);
 void FAST_UintToStr(char str[], uint32_t num);
-void FAST_Uint8ToStr(char str[], uint8_t num);
-void FAST_Uint16ToStr(char str[], uint16_t num);
-void FAST_Uint32ToStr(char str[], uint32_t num);
 
 #endif // FAST_INT_TO_STR_H
 
 //
 // End of File
 //
- 
+
