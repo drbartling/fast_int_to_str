@@ -45,7 +45,6 @@
 
 #include <xc.h>
 #include "pin_manager.h"
-#include <stdbool.h>
 
 void PIN_MANAGER_Initialize(void)
 {
@@ -58,26 +57,13 @@ void PIN_MANAGER_Initialize(void)
     ANSELA = 0x16;
     ANSELB = 0xF0;
     ANSELC = 0xCF;
-    TRISB = 0x70;
+    TRISB = 0xF0;
     TRISC = 0xFF;
     TRISA = 0x36;
 
     OPTION_REGbits.nWPUEN = 0x1;
 
 
-    bool state = GIE;
-    GIE = 0;
-    PPSLOCK = 0x55;
-    PPSLOCK = 0xAA;
-    PPSLOCKbits.PPSLOCKED = 0x00; // unlock PPS
-
-    RB7PPS = 0x12;   //RB7->EUSART:TX;
-
-    PPSLOCK = 0x55;
-    PPSLOCK = 0xAA;
-    PPSLOCKbits.PPSLOCKED = 0x01; // lock PPS
-
-    GIE = state;
 
 }
 

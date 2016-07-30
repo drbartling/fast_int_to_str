@@ -78,25 +78,6 @@
 #define TEST_PIN_SetDigitalMode()   do { ANSA0 = 0; } while(0)
 
 
-// get/set TEST_PIN aliases
-#define TEST_PIN_TRIS               TRISA0
-#define TEST_PIN_LAT                LATA0
-#define TEST_PIN_PORT               RA0
-#define TEST_PIN_WPU                WPUA0
-#define TEST_PIN_ANS                ANSA0
-#define TEST_PIN_SetHigh()    do { LATA0 = 1; } while(0)
-#define TEST_PIN_SetLow()   do { LATA0 = 0; } while(0)
-#define TEST_PIN_Toggle()   do { LATA0 = ~LATA0; } while(0)
-#define TEST_PIN_GetValue()         PORTAbits.RA0
-#define TEST_PIN_SetDigitalInput()    do { TRISA0 = 1; } while(0)
-#define TEST_PIN_SetDigitalOutput()   do { TRISA0 = 0; } while(0)
-
-#define TEST_PIN_SetPullup()    do { WPUA0 = 1; } while(0)
-#define TEST_PIN_ResetPullup()   do { WPUA0 = 0; } while(0)
-#define TEST_PIN_SetAnalogMode()   do { ANSA0 = 1; } while(0)
-#define TEST_PIN_SetDigitalMode()   do { ANSA0 = 0; } while(0)
-
-
 
 /**
  * @Param

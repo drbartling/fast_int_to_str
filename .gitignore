@@ -1,2 +1,5 @@
 *.o
 build/test.exe
+dist
+build
+debug
