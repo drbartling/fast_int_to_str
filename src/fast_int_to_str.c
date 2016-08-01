@@ -43,8 +43,14 @@ SOFTWARE.
 #include "fast_int_to_str.h"
 #include <stdbool.h>
 
+#ifndef UINT24_MAX
+typedef uint32_t uint24_t;
+#define UINT24_MAX (16777215UL)
+#endif
+
 typedef union {
     uint32_t u32;
+    uint24_t u24;
     uint16_t u16;
     uint8_t u8;
 } fast_int_t;
@@ -206,10 +212,10 @@ U32:
     DigitGet(fNum.u32, ch, 10000000UL);
     ConditionalMoveCharToStr(ch, str, leedIn);
 
-    DigitGet(fNum.u32, ch, 1000000UL);
+    DigitGet(fNum.u24, ch, 1000000UL);
     ConditionalMoveCharToStr(ch, str, leedIn);
 
-    DigitGet(fNum.u32, ch, 100000UL);
+    DigitGet(fNum.u24, ch, 100000UL);
     ConditionalMoveCharToStr(ch, str, leedIn);
 
 U16:
@@ -229,5 +235,34 @@ U8:
     DigitGet(fNum.u8, ch, 1UL);
     MoveCharToStr(ch, str);
 
+    *str = 0;
+}
+
+char FAST_hexChars[] = "0123456789ABCDEF";
+
+void FAST_UintToHex(char str[], uint32_t num) {
+    *str++ = '0';
+    *str++ = 'x';
+    bool leadIn = true;
+    int8_t i;
+    for (i = sizeof (num) - 1; i > -1; i--) {
+        uint8_t byteToConvert = num >> (i * 8);
+        if (0 == byteToConvert) {
+            continue;
+        }
+        uint8_t topNibble = byteToConvert >> 4;
+        uint8_t bottomNibble = byteToConvert & 0xF;
+        if (!leadIn || topNibble) {
+            *str++ = FAST_hexChars[topNibble];
+            leadIn = false;
+        }
+        if (!leadIn || bottomNibble) {
+            *str++ = FAST_hexChars[bottomNibble];
+            leadIn = false;
+        }
+    }
+    if (leadIn) {
+        *str++ = '0';
+    }
     *str = 0;
 }

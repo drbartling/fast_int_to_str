@@ -127,6 +127,18 @@ void test_sprintf_Int32PerfTest(void) {
     sprintf(str, "%ld", INT32_MIN);
 }
 
+void test_UintToHex_Uint8PerfTest(void) {
+    FAST_UintToHex(str, UINT8_MAX);
+}
+
+void test_UintToHex_Uint16PerfTest(void) {
+    FAST_UintToHex(str, UINT16_MAX);
+}
+
+void test_UintToHex_Uint32PerfTest(void) {
+    FAST_UintToHex(str, UINT32_MAX);
+}
+
 /*
                          Main application
  */
@@ -142,6 +154,9 @@ void main(void) {
     TEST_RUN(test_IntToStr_Int16PerfTest);
     TEST_RUN(test_IntToStr_Int32PerfTest);
     TEST_RUN(test_sprintf_Int32PerfTest);
+    TEST_RUN(test_UintToHex_Uint8PerfTest);
+    TEST_RUN(test_UintToHex_Uint16PerfTest);
+    TEST_RUN(test_UintToHex_Uint32PerfTest);
 
     while (1) {
         __builtin_software_breakpoint();

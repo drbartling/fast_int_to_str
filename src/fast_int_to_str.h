@@ -91,6 +91,7 @@ SOFTWARE.
  */
 void FAST_IntToStr(char str[], int32_t num);
 void FAST_UintToStr(char str[], uint32_t num);
+void FAST_UintToHex(char str[], uint32_t num);
 
 #endif // FAST_INT_TO_STR_H
 
